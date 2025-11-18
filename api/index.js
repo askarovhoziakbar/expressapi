@@ -5,9 +5,12 @@ import fs from "fs";
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.listen(3000, () => {});
 
 const FILE = "click.json";
+
+if (!fs.existsSync(FILE)) {
+  fs.writeFileSync(FILE, JSON.stringify({ click: 0 }));
+}
 
 app.get("/number", (req, res) => {
   const data = JSON.parse(fs.readFileSync(FILE, "utf-8"));
@@ -17,6 +20,9 @@ app.get("/number", (req, res) => {
 app.post("/number/increment", (req, res) => {
   const data = JSON.parse(fs.readFileSync(FILE, "utf-8"));
   data.click += 1;
+
   fs.writeFileSync(FILE, JSON.stringify(data));
   res.json(data);
 });
+
+export default app;
