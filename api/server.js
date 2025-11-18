@@ -5,7 +5,6 @@ import fs from "fs";
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.listen(3000);
 const FILE = "click.json";
 
 if (!fs.existsSync(FILE)) {
@@ -24,3 +23,5 @@ app.post("/number/increment", (req, res) => {
   fs.writeFileSync(FILE, JSON.stringify(data));
   res.json(data);
 });
+
+module.exports = app;
