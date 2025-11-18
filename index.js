@@ -1,18 +1,28 @@
-// api/number.js
+import express from "express";
+import cors from "cors";
 import fs from "fs";
-const FILE = "./click.json";
 
-export default function handler(req, res) {
-  if (!fs.existsSync(FILE)) {
-    fs.writeFileSync(FILE, JSON.stringify({ click: 0 }));
-  }
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.listen(300);
+const FILE = "click.json";
 
-  const data = JSON.parse(fs.readFileSync(FILE, "utf-8"));
-
-  if (req.method === "POST") {
-    data.click += 1;
-    fs.writeFileSync(FILE, JSON.stringify(data));
-  }
-
-  res.status(200).json(data);
+if (!fs.existsSync(FILE)) {
+  fs.writeFileSync(FILE, JSON.stringify({ click: 0 }));
 }
+
+app.get("/number", (req, res) => {
+  const data = JSON.parse(fs.readFileSync(FILE, "utf-8"));
+  res.json(data);
+});
+
+app.post("/number/increment", (req, res) => {
+  const data = JSON.parse(fs.readFileSync(FILE, "utf-8"));
+  data.click += 1;
+
+  fs.writeFileSync(FILE, JSON.stringify(data));
+  res.json(data);
+});
+
+export default app;
