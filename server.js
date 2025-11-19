@@ -23,7 +23,3 @@ app.post("/number/increment", (req, res) => {
   fs.writeFileSync(FILE, JSON.stringify(data));
   res.json(data);
 });
-
-export default function handler(req, res) {
-  return app(req, res);
-}
